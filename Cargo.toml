@@ -1,0 +1,31 @@
+[package]
+name = "bevy_random_path"
+version = "0.1.0"
+edition = "2024"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+codegen-units = 1
+# opt-level = 'z' # wasm less size.
+
+
+[dependencies]
+fastrand = "2.3.0"
+
+[dev-dependencies.bevy]
+version = "0.18.1"
+default-features = false
+features = ["3d", "free_camera", "dynamic_linking"]
+
+[dependencies.bevy]
+version = "0.18.*"
+default-features = false
+features = ["3d"]
+
+[[example]]
+name = "basic"
