@@ -119,31 +119,20 @@ impl <'a>RandomPath<'a> {
 
     pub fn vary(path: &mut Vec<Vec3>) {
         let mut i = 1;
+        let mut odd_even = 0 ;
         while let Some(current) = path.get(i) {
-            let tang = (current - path[i - 1]).normalize();
+            println!("{:?}", i);
+            let segment = current - path[i - 1];
             let half = (current + path[i - 1]) * 0.5;
-            let div = tang.cross(Vec3::Y).normalize();
+            let div = segment.normalize().cross(Vec3::Y).normalize();
             // let sign = (fastrand::f32() - 0.5).signum();
-            let sign = if i % 4 == 0 { 1. } else { -1. };
-            // let half_cross = half - sign * div *  fastrand::f32() * 20. ;
-            let half_cross = half - sign * div * 2.  ;
+            let sign = if odd_even % 2 == 0 { 1. } else { -1. };
+            let half_cross = half - sign * div *  fastrand::f32() * segment.length() * 0.5 ;
+            // let half_cross = half - sign * div * 2.  ;
             path.insert(i, half_cross);
             i += 2;
+            odd_even += 1 ;
         }
-
-
-        // for i in 1 .. convex_hull.len() {
-        //     let tang = (convex_hull[i] - convex_hull[i - 1]).normalize();
-        //     let half = (convex_hull[i] + convex_hull[i - 1]) * 0.5;
-        //     let div = tang.cross(Vec3::Y).normalize();
-        //     // let sign = (fastrand::f32() - 0.5).signum();
-        //     let sign = if i % 2 == 0 { 1. } else { -1. };
-        //     let half_cross = half - sign * div *  fastrand::f32() * 20. ;
-        //     convex_hull2.push(half_cross);
-        //     convex_hull2.push(convex_hull[i]);
-        // }
-
-        // convex_hull2
     }
 
 
