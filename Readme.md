@@ -11,7 +11,6 @@ Please refer to example "basic"
 ![image1](img/img1.png)
 
 ```rust
-
     RandomLoop::vary(&mut rpath, 50.);
     
 ```
