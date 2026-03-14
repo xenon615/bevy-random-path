@@ -7,7 +7,7 @@ Please refer to example "basic"
 
     let mut rpath = RandomLoop::generate(12, vec3(100., 0., 100.));
     
-``
+```
 ![image1](img/img1.png)
 
 ```rust
