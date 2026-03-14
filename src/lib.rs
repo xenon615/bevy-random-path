@@ -2,57 +2,22 @@ use bevy::prelude::*;
 use std::{collections::HashMap};
 
 
-pub struct RandomPath<'a> {
-    count: u32,
-    map_dim: Vec3,
-    predefined: Option<&'a Vec<Vec3>>,
-    accuracy: f32
-}
+pub struct RandomLoop;
 
-impl <'a>RandomPath<'a> {
-    pub fn new(count: u32, map_dim: Vec3) -> Self {
-        Self {
-            count,
-            map_dim,
-            predefined: None,
-            accuracy: 0.001
-       }
-    }
+impl RandomLoop  {
+    const ACCURACY: f32 = 0.001;
 
-    // ---
+    /// Returns a Vec<Vec3> representing convex hull around **points_count** random points with spread of **scale**
     #[allow(dead_code)]
-    pub fn from_predefined(predefined: &'a Vec<Vec3>) -> Self{
-        Self {
-            count: 0,
-            map_dim: Vec3::ZERO,
-            predefined: Some(predefined),
-            accuracy: 0.001
-       }
-    }
-
-    // ---
-
-    #[allow(dead_code)]
-    fn with_accuracy(mut self, accuracy: f32) -> Self {
-        self.accuracy = accuracy;
-        self
-    }
-
-    // ---
-
-    #[allow(dead_code)]
-    pub fn generate(&self) -> Vec<Vec3> {
-        let path = match self.predefined {
-            Some(path)=> path.clone(),
-            _ => (0 .. self.count)
-                .map(| _ |  vec3(
-                        (fastrand::f32() - 0.5) * self.map_dim.x * 2.,
-                        (fastrand::f32() - 0.5) * self.map_dim.y * 2.,
-                        (fastrand::f32() - 0.5) * self.map_dim.z * 2.
-                    )
+    pub fn generate(points_count: usize, scale: Vec3 ) -> Vec<Vec3> {
+        let path = (0 .. points_count)
+            .map(| _ |  vec3(
+                    (fastrand::f32() - 0.5) * scale.x * 2.,
+                    (fastrand::f32() - 0.5) * scale.y * 2.,
+                    (fastrand::f32() - 0.5) * scale.z * 2.
                 )
-                .collect::<Vec<_>>()
-        };
+            )
+            .collect::<Vec<_>>();
 
 
         let min_z = path.iter().min_by( | a, b |  a.z.total_cmp(&b.z)).unwrap();
@@ -65,7 +30,7 @@ impl <'a>RandomPath<'a> {
             .filter(| p | **p != *p0)
             .map( | p |  {
                 let d = (p - p0).normalize().dot(Vec3::X);
-                ((d  / self.accuracy) as i32, p)
+                ((d  / Self::ACCURACY) as i32, p)
             })
             .for_each(| p | {
                 dedup.entry(p.0).and_modify(| e |  {
@@ -97,6 +62,8 @@ impl <'a>RandomPath<'a> {
 
     // ---
 
+    /// Vary the path  by adding new points shifted by **variation**
+    #[allow(dead_code)]
     pub fn vary(path: &mut Vec<Vec3>, variation: f32) {
         let mut i = 1;
         let mut odd_even = 0 ;
@@ -118,7 +85,8 @@ impl <'a>RandomPath<'a> {
     }
 
     // ---
-
+    ///  Smooth the path let's limit the rotation angles not less than **min_angle**  and segment length not less than **min_segment_length**
+    #[allow(dead_code)]
     pub fn smooth_out(path: &mut Vec<Vec3>, min_angle: f32, min_segment_length: f32) {
         for _l in 0 .. path.len() {
             for i in 1 .. path.len() {

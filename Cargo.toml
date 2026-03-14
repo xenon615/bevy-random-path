@@ -1,5 +1,5 @@
 [package]
-name = "bevy_random_path"
+name = "bevy_random_loop"
 version = "0.1.0"
 edition = "2024"
 
