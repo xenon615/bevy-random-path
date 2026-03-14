@@ -23,7 +23,6 @@ features = ["3d", "free_camera", "dynamic_linking"]
 [dependencies]
 fastrand = "2.3.0"
 
-
 [dependencies.bevy]
 version = "0.18.*"
 default-features = false
