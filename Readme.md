@@ -1,7 +1,6 @@
 # Generate Random Loop  
 Let's say we need a race track, and we need to get a random set  of points that describe it.  
-
-Please refer to example "basic"  
+Please refer to [/examples/basic.rs](/examples/basic.rs) 
 
 Lets create convex hull around random points  
 
