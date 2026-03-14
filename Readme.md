@@ -26,3 +26,8 @@ Smooth it
         let spline = cr.iter_positions(120).collect::<Vec<_>>();
 ```
 ![image4](img/img4.png)
+
+## Version Compatibility
+| bevy | bevy_random_loop |
+| ---- | ------------------------- |
+| 0.18 | 0.1                       |
